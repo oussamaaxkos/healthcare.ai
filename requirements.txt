@@ -1,0 +1,48 @@
+# # Flask + DB
+# Flask==3.1.1
+# Flask-SQLAlchemy==3.1.1
+# psycopg2-binary==2.9.10
+
+# # Core dependencies
+# numpy==1.25.2
+# pandas==2.3.1
+# PyPDF2==3.0.1
+# # sentence-transformers==2.2.2
+# openai==1.101.0
+# faiss-cpu==1.12.0
+# python-dotenv==1.1.1
+# markdown2==2.4.3
+
+# # # CPU-only PyTorch + torchvision + torchaudio (compatible versions)
+# # torch==2.1.0+cpu
+# # torchvision==0.16.2+cpu
+# # torchaudio==2.1.0+cpu
+# # -f https://download.pytorch.org/whl/cpu/torch_stable.html
+
+# Flask + DB
+Flask==3.1.1
+Flask-SQLAlchemy==3.1.1
+psycopg2-binary==2.9.10
+
+# Core dependencies
+numpy==2.3.1
+pandas==2.3.1
+PyPDF2==3.0.1
+faiss-cpu==1.9.0
+python-dotenv==1.1.1
+markdown2==2.4.3
+tiktoken>=0.3.2,<0.4.0
+Pillow==11.3.0  # <-- ADD THIS LINE for PIL import
+
+# GenAI - Downgrade OpenAI to be compatible with genai
+openai==0.27.8  # Compatible with genai 2.1.0
+google-generativeai==0.8.5  # <-- Change to Google's genai package
+
+# for scrapping
+
+selenium
+webdriver-manager
+pandas
+
+
+

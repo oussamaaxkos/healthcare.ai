@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>X-Health - AI-Powered Healthcare Assistant</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8f9fa;
+            min-height: 100vh;
+            display: flex;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: #1a1a1a;
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            z-index: 1000;
+            overflow-y: auto;
+            color: #ffffff;
+        }
+
+        .sidebar-header {
+            padding: 20px 16px;
+            border-bottom: 1px solid #333;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .logo-text {
+            font-size: 16px;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .user-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-left: auto;
+        }
+
+        .user-avatar {
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .user-plan {
+            font-size: 12px;
+            color: #888;
+        }
+
+        .new-chat-btn {
+            margin: 16px;
+            background: #333;
+            border: 1px solid #444;
+            color: #ffffff;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            width: calc(100% - 32px);
+            transition: all 0.2s ease;
+        }
+
+        .new-chat-btn:hover {
+            background: #404040;
+        }
+
+        .sidebar-nav {
+            padding: 16px 0;
+        }
+
+        .nav-section {
+            margin-bottom: 24px;
+        }
+
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            text-decoration: none;
+            color: #cccccc;
+            font-weight: 400;
+            font-size: 14px;
+            gap: 12px;
+            transition: all 0.2s ease;
+            border-radius: 0;
+            margin: 2px 8px;
+            border-radius: 8px;
+        }
+
+        .sidebar-nav a:hover {
+            background: #2a2a2a;
+            color: #ffffff;
+        }
+
+        .sidebar-nav a.active {
+            background: #333;
+            color: #ffffff;
+        }
+
+        .nav-icon {
+            width: 18px;
+            height: 18px;
+            opacity: 0.8;
+        }
+
+        .nav-section-title {
+            padding: 8px 16px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 16px;
+        }
+
+        .dropdown-arrow {
+            margin-left: auto;
+            font-size: 12px;
+            opacity: 0.6;
+            transition: transform 0.2s ease;
+        }
+
+        .dropdown-arrow.expanded {
+            transform: rotate(90deg);
+        }
+
+        .main-container {
+            margin-left: 280px;
+            flex: 1;
+            min-height: 100vh;
+            background: white;
+        }
+
+        .header {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 20px 40px;
+            background: white;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .sign-up-btn {
+            background: white;
+            border: 1px solid #007bff;
+            color: #007bff;
+            padding: 8px 20px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .sign-up-btn:hover {
+            background: #007bff;
+            color: white;
+        }
+
+        .main-content {
+            padding: 60px 40px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .hero-section {
+            margin-bottom: 80px;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            max-width: 1000px;
+            margin: 0 auto 60px;
+            transition: all 0.3s ease;
+            transform-origin: top;
+        }
+
+        .services-grid.shrink {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            transform: scale(0.85);
+        }
+
+        .service-card {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 12px;
+            padding: 30px 20px;
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+
+        .service-card:hover {
+            box-shadow: 0 4px 20px rgba(0, 123, 255, 0.1);
+            border-color: #007bff;
+        }
+
+        .service-icon {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 16px;
+            background: #e3f2fd;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #007bff;
+            font-size: 20px;
+        }
+
+        .service-icon svg {
+            width: 24px;
+            height: 24px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .service-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #007bff;
+            margin-bottom: 8px;
+        }
+
+        .service-description {
+            font-size: 14px;
+            color: #6c757d;
+            line-height: 1.4;
+        }
+
+        .chat-input-section {
+            max-width: 600px;
+            margin: 0 auto 80px;
+            position: relative;
+        }
+
+        .input-container {
+            display: flex;
+            align-items: center;
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 25px;
+            padding: 4px 4px 4px 20px;
+            margin-bottom: 40px;
+        }
+
+        .chat-input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 12px 0;
+            font-size: 14px;
+            color: #6c757d;
+            outline: none;
+        }
+
+        .input-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-btn {
+            width: 36px;
+            height: 36px;
+            border: none;
+            border-radius: 50%;
+            background: #007bff;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            font-size: 14px;
+        }
+
+        .action-btn:hover {
+            background: #0056b3;
+        }
+
+        .action-btn svg {
+            width: 16px;
+            height: 16px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        #chatWindow {
+            max-width: 1500px;
+            margin: 20px auto 0;
+            border: 1px solid #ffffff;
+            border-radius: 12px;
+            padding: 20px;
+            background: #ffffff;
+            height: 300px;
+            overflow-y: auto;
+            display: none;
+            flex-direction: column;
+            gap: 10px;
+            transition: all 0.3s ease;
+            scrollbar-width: none;
+        }
+
+        #chatWindow::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Mobile Toggle */
+        .mobile-toggle {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1001;
+            background: #007bff;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+        }
+
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .mobile-toggle {
+                display: block;
+            }
+
+            .sidebar-overlay.show {
+                display: block;
+            }
+
+            .main-container {
+                margin-left: 0;
+            }
+
+            .header {
+                padding-left: 80px;
+                padding-right: 20px;
+            }
+
+            .main-content {
+                padding: 40px 20px;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="mobile-toggle" onclick="toggleSidebar()">☰</button>
+    <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+    <!-- Sidebar -->
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-icon">X</div>
+            <div class="logo-text">Personal</div>
+            <div class="user-badge">
+                <span class="user-plan">Free</span>
+                <div class="user-avatar">P</div>
+            </div>
+        </div>
+        
+        <button class="new-chat-btn">New Chat</button>
+        
+        <div class="sidebar-nav">
+            <div class="nav-section">
+                <a href="#search">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <circle cx="11" cy="11" r="8"/>
+                        <path d="m21 21-4.35-4.35"/>
+                    </svg>
+                    Search
+                </a>
+                <a href="#projects">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M2 3h20v18H2z"/>
+                        <path d="M8 21v-5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v5"/>
+                    </svg>
+                    Projects
+                </a>
+                <a href="#recents">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="12,6 12,12 16,14"/>
+                    </svg>
+                    Recents
+                </a>
+                <a href="#community">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                        <circle cx="9" cy="7" r="4"/>
+                        <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                    </svg>
+                    Community
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">
+                    Favorites
+                    <span class="dropdown-arrow">›</span>
+                </div>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">
+                    Recents
+                    <span class="dropdown-arrow expanded">›</span>
+                </div>
+                <a href="#xhealth" class="active">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                    </svg>
+                    X-Health AI services
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-container">
+        <!-- Header -->
+        <header class="header">
+            <a href="#signup" class="sign-up-btn">Sign up</a>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Hero Section -->
+            <div class="hero-section">
+                <!-- Services Grid -->
+                <div class="services-grid">
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                                <path d="M8 10h.01M12 10h.01M16 10h.01"/>
+                            </svg>
+                        </div>
+                        <div class="service-title">AI Chatbot</div>
+                        <div class="service-description">24/7 intelligent health assistant</div>
+                    </div>
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                                <line x1="8" y1="21" x2="16" y2="21"/>
+                                <line x1="12" y1="17" x2="12" y2="21"/>
+                                <circle cx="12" cy="10" r="3"/>
+                            </svg>
+                        </div>
+                        <div class="service-title">Telemedicine</div>
+                        <div class="service-description">Remote consultations with experts</div>
+                    </div>
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+                                <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                                <line x1="12" y1="19" x2="12" y2="23"/>
+                                <line x1="8" y1="23" x2="16" y2="23"/>
+                            </svg>
+                        </div>
+                        <div class="service-title">Voice Chat</div>
+                        <div class="service-description">Hands-free medical assistance</div>
+                    </div>
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                                <circle cx="9" cy="7" r="4"/>
+                                <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                            </svg>
+                        </div>
+                        <div class="service-title">B2C & B2B</div>
+                        <div class="service-description">Solutions for all healthcare needs</div>
+                    </div>
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path d="M3 21h18l-9-18z"/>
+                                <path d="M12 9v4"/>
+                                <path d="M12 17h.01"/>
+                            </svg>
+                        </div>
+                        <div class="service-title">Hospital Directory</div>
+                        <div class="service-description">Find doctors & facilities nearby</div>
+                    </div>
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <circle cx="12" cy="12" r="10"/>
+                                <line x1="2" y1="12" x2="22" y2="12"/>
+                                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                            </svg>
+                        </div>
+                        <div class="service-title">Multilingual</div>
+                        <div class="service-description">Support in multiple languages</div>
+                    </div>
+                </div>
+
+                <div id="chatWindow"></div>
+
+                <!-- Chat Input -->
+                <div class="chat-input-section">
+                    <div class="input-container">
+                        <input type="text" class="chat-input" placeholder="I have a medical emergency" id="chatInput">
+                        <div class="input-actions">
+                            <button class="action-btn" onclick="enableVoiceChat()" title="Voice Chat">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+                                    <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                                    <line x1="12" y1="19" x2="12" y2="23"/>
+                                    <line x1="8" y1="23" x2="16" y2="23"/>
+                                </svg>
+                            </button>
+                            <button class="action-btn" onclick="sendMessage()" title="Send">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <line x1="22" y1="2" x2="11" y2="13"/>
+                                    <polygon points="22,2 15,22 11,13 2,9 22,2"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.querySelector('.sidebar-overlay');
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('show');
+        }
+
+        function enableVoiceChat() {
+            alert('Voice chat activated! Start speaking...');
+        }
+
+        function slowScrollToBottom(duration = 2000) {
+            const start = window.scrollY;
+            const end = document.body.scrollHeight - window.innerHeight;
+            const distance = end - start;
+            let startTime = null;
+
+            function animation(currentTime) {
+                if (!startTime) startTime = currentTime;
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                window.scrollTo(0, start + distance * progress);
+
+                if (progress < 1) {
+                    requestAnimationFrame(animation);
+                }
+            }
+
+            requestAnimationFrame(animation);
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            if (!message) return;
+
+            const chatWindow = document.getElementById("chatWindow");
+            if (chatWindow.style.display === "none") {
+                chatWindow.style.display = "flex";
+                document.querySelector('.services-grid').classList.add('shrink');
+            }
+
+            addMessage("user", message);
+            chatWindow.scrollTo({ top: chatWindow.scrollHeight, behavior: "smooth" });
+
+            const aiMsg = document.createElement("div");
+            aiMsg.style.padding = "10px 14px";
+            aiMsg.style.borderRadius = "12px";
+            aiMsg.style.maxWidth = "100%";
+            aiMsg.style.alignSelf = "flex-start";
+            aiMsg.style.background = "white";
+            aiMsg.style.color = "#333";
+            aiMsg.marginTop = "10px";
+            chatWindow.appendChild(aiMsg);
+
+            slowScrollToBottom(450);
+
+            // Simulate streaming response
+            const responses = [
+                "Thank you for reaching out about your medical emergency. ",
+                "I'm here to help you assess the situation. ",
+                "Can you please describe your symptoms in more detail? ",
+                "If this is a life-threatening emergency, please call emergency services immediately."
+            ];
+
+            let index = 0;
+            const interval = setInterval(() => {
+                if (index < responses.length) {
+                    aiMsg.innerHTML += responses[index];
+                    chatWindow.scrollTo({ top: chatWindow.scrollHeight, behavior: "smooth" });
+                    index++;
+                } else {
+                    clearInterval(interval);
+                }
+            }, 500);
+
+            input.value = '';
+        }
+
+        function addMessage(sender, text) {
+            const chatWindow = document.getElementById("chatWindow");
+            const msg = document.createElement("div");
+
+            if (sender === "ai") {
+                msg.innerHTML = text;
+            } else {
+                msg.textContent = text;
+            }
+
+            msg.style.padding = "10px 14px";
+            msg.style.borderRadius = "12px";
+            msg.style.maxWidth = "80%";
+
+            if (sender === "user") {
+                msg.style.alignSelf = "flex-end";
+                msg.style.background = "#007bff";
+                msg.style.color = "white";
+            } else if (sender === "ai") {
+                msg.style.alignSelf = "flex-start";
+                msg.style.background = "white";
+                msg.style.color = "#333";
+            } else {
+                msg.style.alignSelf = "center";
+                msg.style.background = "#f8d7da";
+                msg.style.color = "#721c24";
+            }
+
+            chatWindow.appendChild(msg);
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+        }
+
+        // Enter key support
+        document.getElementById('chatInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // Close sidebar on nav click (mobile)
+        document.querySelectorAll('.sidebar-nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 768) {
+                    toggleSidebar();
+                }
+            });
+        });
+
+        // Toggle dropdown functionality
+        document.querySelectorAll('.nav-section-title').forEach(title => {
+            title.addEventListener('click', function() {
+                const arrow = this.querySelector('.dropdown-arrow');
+                arrow.classList.toggle('expanded');
+            });
+        });
+    </script>
+</body>
+</html>

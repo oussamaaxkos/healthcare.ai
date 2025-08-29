@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>X-Health RAG MVP</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <h1>X-Health – Assistant Médical</h1>
+    <form method="POST">
+        <input type="text" name="query" placeholder="Posez votre question médicale..." required>
+        <button type="submit">Envoyer</button>
+    </form>
+
+    {% if response %}
+        <h2>Réponse :</h2>
+        <p>{{ response }}</p>
+
+        <h3>Sources :</h3>
+        <ul>
+            {% for src in sources %}
+                <li><a href="{{ src }}" target="_blank">{{ src }}</a></li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</body>
+</html>

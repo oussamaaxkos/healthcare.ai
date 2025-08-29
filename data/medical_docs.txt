@@ -1,0 +1,11 @@
+Title: NHS - Fever in Adults
+Text: Fever is usually a sign that your body is fighting an infection. It can be caused by a variety of illnesses.
+Source: https://www.nhs.uk/conditions/fever-in-adults/
+
+Title: NHS - Headache
+Text: Headache can be caused by stress, dehydration or other medical conditions. Drink water and rest before seeking medical advice.
+Source: https://www.nhs.uk/conditions/headache/
+
+Title: NHS - Common Cold
+Text: The common cold is a mild viral infection of the nose, throat, sinuses and upper airways.
+Source: https://www.nhs.uk/conditions/common-cold/
