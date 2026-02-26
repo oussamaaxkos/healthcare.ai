@@ -17,7 +17,7 @@ from gethd import scrape_hospitals_doctors
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
-import threading
+
 
 
 # ========== CONFIG ==========
