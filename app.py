@@ -9,7 +9,7 @@ import openai
 from PIL import Image
 import base64
 import io
-import markdown2
+import markdown
 import google.generativeai as genai
 from gethd import scrape_hospitals_doctors
 
