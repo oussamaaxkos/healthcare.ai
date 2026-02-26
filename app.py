@@ -13,7 +13,7 @@ import markdown2
 import google.generativeai as genai
 from gethd import scrape_hospitals_doctors
 
-
+import threading
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
